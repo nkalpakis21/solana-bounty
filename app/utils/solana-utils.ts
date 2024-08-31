@@ -8,7 +8,7 @@ const connection = new Connection(network, 'confirmed');
  * @param {string} publicKeyString - The public key of the account
  * @returns {Promise<AccountInfo | null>} - The account info or null if not found
  */
-export async function getAccountInfo(publicKeyString) {
+export async function getAccountInfo(publicKeyString: string) {
   try {
     const publicKey = new PublicKey(publicKeyString);
     const info = await connection.getAccountInfo(publicKey);
