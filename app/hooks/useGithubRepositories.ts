@@ -10,8 +10,7 @@ interface Repository {
     html_url: string;
     stargazers_count: number;
 }
-
-const GITHUB_TOKEN = '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';
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 const fetcher = async (url: string): Promise<{ items: Repository[]; total_count: number }> => {
     const response = await fetch(url, {
