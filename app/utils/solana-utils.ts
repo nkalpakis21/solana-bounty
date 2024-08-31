@@ -14,7 +14,7 @@ export async function getAccountInfo(publicKeyString: string) {
     const info = await connection.getAccountInfo(publicKey);
     return info;
   } catch (error) {
-    console.error('Error fetching account info:', error);
+    console.error('Error fetching account info: ', error);
     return null;
   }
 }
