@@ -10,9 +10,10 @@ interface Repository {
     html_url: string;
     stargazers_count: number;
 }
-const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 
 const fetcher = async (url: string): Promise<{ items: Repository[]; total_count: number }> => {
+    console.log(GITHUB_TOKEN);
     const response = await fetch(url, {
         headers: {
             'Authorization': `token ${GITHUB_TOKEN}`,
