@@ -48,7 +48,7 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
   } = repository;
 
   return (
-    <Card className="w-full hover:shadow-lg hover:shadow-indigo-800 transition-shadow duration-300 ease-in-out rounded-sm">
+    <Card className="w-full hover:shadow-lg hover:shadow-indigo-200 transition-shadow duration-300 ease-in-out rounded-sm">
       <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div className="flex items-center space-x-4">
           <Avatar className="h-10 w-10">
