@@ -9,7 +9,6 @@ import { Badge } from "@/components/ui/badge"
 import { GitHubLogoIcon, MagnifyingGlassIcon, StarIcon } from '@radix-ui/react-icons'
 import { Skeleton } from "@/components/ui/skeleton"
 import { Label } from "@/components/ui/label"
-import PayPalLinkGenerator from './PaypalLinkGenerator'
 
 // Replace with your actual Client ID from PayPal
 const PAYPAL_CLIENT_ID = "AT42DBUEBrktRK6_BvTo_Sltbct_3Hx0wyz3GtpNueZY5P89TWULO1J6t81XYVqyMPyaQdd0YOHZyzYg"
@@ -116,7 +115,6 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
           </div>
         </CardHeader>
       </Card>
-      <PayPalLinkGenerator/>
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <h2 className="text-2xl font-semibold">Open Issues ({repo.open_issues_count})</h2>
         <div className="relative w-full sm:w-auto">
