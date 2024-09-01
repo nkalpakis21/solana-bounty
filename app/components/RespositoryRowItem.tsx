@@ -48,7 +48,7 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
   } = repository;
 
   return (
-    <a href={`/repositories/${full_name}`} target="_blank" rel="noopener noreferrer" className="block">
+    <a href={`/discover/${full_name}`} target="_blank" rel="noopener noreferrer" className="block">
       <Card className="w-full hover:shadow-lg hover:shadow-indigo-200 transition-shadow duration-300 ease-in-out rounded-sm cursor-pointer">
         <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">

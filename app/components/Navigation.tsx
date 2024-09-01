@@ -10,12 +10,12 @@ import { motion, AnimatePresence } from "framer-motion"
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
-  { href: '/login', label: 'Login', icon: KeyRound },
-  // { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   // { href: '/governance', label: 'Governance', icon: Gavel },
   // { href: '/profile', label: 'Profile', icon: User },
   // { href: '/submission', label: 'Submission', icon: FileText },
-  { href: '/repositories', label: 'Repositories', icon: Github },
+  { href: '/discover', label: 'Discover', icon: Github },
+  { href: '/login', label: 'Login', icon: KeyRound },
 ]
 
 export default function Navigation() {
