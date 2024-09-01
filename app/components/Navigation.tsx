@@ -29,7 +29,7 @@ export default function Navigation() {
         <nav className="flex items-center justify-between py-4">
           <div className="flex items-center">
             <h1 className="text-2xl font-bold">
-              <Link href="/" className="flex items-center space-x-2 hover:text-purple-200 transition-colors">
+              <Link href="/" className="flex items-center space-x-2 hover:text-indigo-200 transition-colors">
                 <span className="rounded-full p-1">
                   🌟
                 </span>
@@ -45,7 +45,7 @@ export default function Navigation() {
           <Button
             variant="ghost"
             size="icon"
-            className="md:hidden text-white hover:bg-purple-600"
+            className="md:hidden text-white hover:bg-indigo-600"
             onClick={toggleMenu}
             aria-label="Toggle menu"
           >
@@ -60,7 +60,7 @@ export default function Navigation() {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="md:hidden bg-purple-800"
+            className="md:hidden bg-indigo-800"
           >
             <nav className="px-4 py-2 space-y-1">
               {navItems.map((item) => (
@@ -91,7 +91,7 @@ function NavItem({ href, label, icon: Icon, pathname, mobile }: NavItemProps) {
         "flex items-center px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 ease-in-out",
         isActive
           ? "bg-indigo-600 text-white shadow-md transform scale-95"
-          : "text-purple-100 hover:bg-indigo-600 hover:text-white hover:shadow-md hover:scale-95",
+          : "text-indigo-100 hover:bg-indigo-600 hover:text-white hover:shadow-md hover:scale-95",
         mobile && "justify-start w-full"
       )}
     >
