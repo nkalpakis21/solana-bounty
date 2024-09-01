@@ -3,13 +3,14 @@
 import React, { useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { Menu, X, Home, LayoutDashboard, Gavel, User, FileText, Github } from 'lucide-react'
+import { Menu, X, Home, KeyRound, LayoutDashboard, Gavel, User, FileText, Github } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 
 const navItems = [
   { href: '/', label: 'Home', icon: Home },
+  { href: '/login', label: 'Login', icon: KeyRound },
   // { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   // { href: '/governance', label: 'Governance', icon: Gavel },
   // { href: '/profile', label: 'Profile', icon: User },
