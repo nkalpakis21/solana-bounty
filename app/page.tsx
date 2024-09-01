@@ -18,7 +18,7 @@ export default function HomePage() {
           <div className="flex justify-center space-x-4 animate-fade-in-up animation-delay-400">
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-4 mt-8 animate-fade-in-up animation-delay-400">
             <Button asChild size="lg" className="w-full sm:w-auto bg-white text-indigo-800 px-3 hover:bg-indigo-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
-              <Link href="/dashboard" className="flex items-center justify-center">
+              <Link href="/repositories" className="flex items-center justify-center">
                 Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
