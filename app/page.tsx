@@ -22,11 +22,11 @@ export default function HomePage() {
                 Get Started <ArrowRight className="ml-2 h-5 w-5" />
               </Link>
             </Button>
-            <Button asChild size="lg" variant="outline" className="w-full sm:w-auto border-2 px-3 border-white text-indigo-800 hover:bg-indigo-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
+            {/* <Button asChild size="lg" className="w-full sm:w-auto bg-white text-indigo-800 px-3 hover:bg-indigo-100 transition-colors duration-300 shadow-lg hover:shadow-xl">
               <Link href="/about" className="flex items-center justify-center">
                 Learn More
               </Link>
-            </Button>
+            </Button> */}
           </div>
           </div>
         </div>
