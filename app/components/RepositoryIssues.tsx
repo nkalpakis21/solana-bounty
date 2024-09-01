@@ -1,5 +1,6 @@
-import React from 'react'
-import { useState } from 'react'
+'use client'
+
+import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
@@ -7,8 +8,42 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { GitHubLogoIcon, MagnifyingGlassIcon, StarIcon } from '@radix-ui/react-icons'
 import { Skeleton } from "@/components/ui/skeleton"
-import { Issue, Repository } from 'app/types/types'
+import { Label } from "@/components/ui/label"
+import PayPalLinkGenerator from './PaypalLinkGenerator'
 
+// Replace with your actual Client ID from PayPal
+const PAYPAL_CLIENT_ID = "AT42DBUEBrktRK6_BvTo_Sltbct_3Hx0wyz3GtpNueZY5P89TWULO1J6t81XYVqyMPyaQdd0YOHZyzYg"
+
+// Define types locally
+interface User {
+  login: string;
+  avatar_url: string;
+}
+
+interface Label {
+  id: number;
+  name: string;
+  color: string;
+}
+
+interface Issue {
+  id: number;
+  number: number;
+  title: string;
+  html_url: string;
+  user: User;
+  created_at: string;
+  labels: Label[];
+  comments: number;
+}
+
+interface Repository {
+  full_name: string;
+  description: string;
+  stargazers_count: number;
+  language: string;
+  open_issues_count: number;
+}
 
 interface RepositoryIssuesProps {
   repo?: Repository;
@@ -18,6 +53,9 @@ interface RepositoryIssuesProps {
 export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const [isOpen, setIsOpen] = useState(false)
+  const [amount, setAmount] = useState("5.00")
+  const [currency, setCurrency] = useState("USD")
   const issuesPerPage = 10
 
   if (!repo || !issues) {
@@ -47,7 +85,7 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
   }
 
   // Filter issues based on search term
-  const filteredIssues = issues.filter(issue =>
+  const filteredIssues = issues.filter((issue) =>
     issue.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
 
@@ -78,7 +116,7 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
           </div>
         </CardHeader>
       </Card>
-
+      <PayPalLinkGenerator/>
       <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <h2 className="text-2xl font-semibold">Open Issues ({repo.open_issues_count})</h2>
         <div className="relative w-full sm:w-auto">
