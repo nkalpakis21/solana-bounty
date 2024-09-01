@@ -10,7 +10,7 @@ export default function HomePage() {
       <main className="container mx-auto px-6 py-12 md:py-24">
         <div className="text-center mb-12">
           <h1 className="text-4xl md:text-6xl font-extrabold mb-4 animate-fade-in-up">
-            Blockchain Incentive Platform
+            Dev Incentive Platform
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-indigo-200 animate-fade-in-up animation-delay-200">
             Contribute to open-source projects and earn rewards!

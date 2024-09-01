@@ -9,7 +9,7 @@ import RepositoryIssues from 'app/components/RepositoryIssues';
 
 const RepositoryPage = () => {
   const { repoName, repoOwner }: {repoName: string, repoOwner: string} = useParams();
-  const { repository, issues, isLoading, isError } = useGithubRepositoryIssues(repoName || '', repoOwner || '');
+  const { repository, issues, isLoading, isError } = useGithubRepositoryIssues(repoOwner || '', repoName || '');
 
   return (
     <RepositoryIssues repo={repository} issues={issues} />

@@ -35,7 +35,7 @@ export default function RepositoryList() {
   }
 
   return (
-    <Card className="w-full max-w-4xl mx-auto rounded-sm">
+    <Card className="w-full max-w-4xl mx-auto rounded-sm my-4">
       <CardHeader>
         <CardTitle className="text-3xl font-bold mb-4">Top Open Source Repositories</CardTitle>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch}/>

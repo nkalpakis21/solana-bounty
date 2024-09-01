@@ -60,7 +60,7 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
           </Avatar>
           <div>
             <CardTitle className="text-lg font-bold">
-              <a href={html_url} className="hover:underline" target="_blank" rel="noopener noreferrer">
+              <a href={`/repositories/${full_name}`} className="hover:underline" target="_blank" rel="noopener noreferrer">
                 {full_name}
               </a>
             </CardTitle>
