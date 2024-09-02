@@ -11,7 +11,6 @@ export default function AppLogoutPage() {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      console.log('Logout successful');
       // Invalidate the cache and refetch the data
       mutate('/api/auth', { user: null, isLoggedIn: false }, false);
       router.push('/'); // Use router.push for client-side navigation

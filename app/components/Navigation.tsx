@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { Menu, X, Home, KeyRound, LayoutDashboard, Gavel, User, FileText, Github } from 'lucide-react'
@@ -8,13 +8,13 @@ import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
 import { useAuth } from 'app/hooks/useAuth'
+import { initializeFirebase } from 'app/lib/firebaseClient'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
   const { user, isLoggedIn, loading, error } = useAuth();
 
-  console.log('user', user);
   const loginNavItems = [
     { href: '/', label: 'Home', icon: Home },
     { href: '/discover', label: 'Discover', icon: Github },
@@ -28,6 +28,10 @@ export default function Navigation() {
   ]
   const navItems = isLoggedIn ? logoutNavItems : loginNavItems;
   const toggleMenu = () => setIsOpen(!isOpen)
+
+  useEffect(() => {
+    initializeFirebase();
+  }, []);
 
   return (
     <header className="bg-gradient-to-r from-indigo-900 via-indigo-800 to-indigo-700 text-white shadow-lg">

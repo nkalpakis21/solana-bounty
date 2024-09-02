@@ -51,7 +51,6 @@ const useGithubRepositories = (
             // Map over all repositories and fetch their issue count
             const issues = await Promise.all(
                 repoData.items.map(async (repo) => {
-                    console.log(repo);
                     const repoDetails = await fetcher(
                         `https://api.github.com/repos/${repo.full_name}`
                     );
