@@ -42,7 +42,7 @@ export default function AppLogoutPage() {
           </Link>
         </p>
         <div className="mt-6 text-center text-xs text-gray-500">
-          By logging out, you'll need to sign in again to access your account
+          By logging out, you will need to sign in again to access your account
         </div>
       </div>
     </div>
