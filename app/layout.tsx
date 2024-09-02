@@ -18,10 +18,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navigation/>
-        <div className="min-h-screen">
-          {children}
-        </div>
+          <Navigation />
+          <div className="min-h-screen">
+            {children}
+          </div>
       </body>
     </html>
   );

@@ -7,21 +7,26 @@ import { Menu, X, Home, KeyRound, LayoutDashboard, Gavel, User, FileText, Github
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { motion, AnimatePresence } from "framer-motion"
-
-const navItems = [
-  { href: '/', label: 'Home', icon: Home },
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
-  // { href: '/governance', label: 'Governance', icon: Gavel },
-  // { href: '/profile', label: 'Profile', icon: User },
-  // { href: '/submission', label: 'Submission', icon: FileText },
-  { href: '/discover', label: 'Discover', icon: Github },
-  { href: '/login', label: 'Login', icon: KeyRound },
-]
+import { useAuth } from 'app/hooks/useAuth'
 
 export default function Navigation() {
   const [isOpen, setIsOpen] = useState(false)
   const pathname = usePathname()
+  const { user, isLoggedIn, loading, error } = useAuth();
 
+  console.log('user', user);
+  const loginNavItems = [
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/discover', label: 'Discover', icon: Github },
+    { href: '/login', label: 'Login', icon: KeyRound },
+  ]
+  const logoutNavItems = [
+    { href: '/', label: 'Home', icon: Home },
+    { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { href: '/discover', label: 'Discover', icon: Github },
+    { href: '/logout', label: 'Logout', icon: KeyRound },
+  ]
+  const navItems = isLoggedIn ? logoutNavItems : loginNavItems;
   const toggleMenu = () => setIsOpen(!isOpen)
 
   return (

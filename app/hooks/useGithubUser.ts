@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 export const useGitHubUser = () => {
     const [userData, setUserData] = useState<any>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const router = useRouter(); // Use next/navigation for Next.js 13
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -11,13 +13,14 @@ export const useGitHubUser = () => {
                 const response = await fetch('/api/github/user');
 
                 if (!response.ok) {
-                    throw new Error('Failed to fetch GitHub user data');
+                    console.error('Failed to fetch GitHub user data');
+                    router.push('/login'); // Client-side navigation
+                } else {
+                    const data = await response.json();
+                    setUserData(data);
                 }
-
-                const data = await response.json();
-                setUserData(data);
             } catch (error: any) {
-                // TODO determine type for error
+                console.error('Error fetching GitHub user data:', error);
                 setError(error.message);
             } finally {
                 setLoading(false);
@@ -25,7 +28,7 @@ export const useGitHubUser = () => {
         };
 
         fetchUserData();
-    }, []);
+    }, [router]); // Include router in the dependency array
 
     return { userData, loading, error };
 };

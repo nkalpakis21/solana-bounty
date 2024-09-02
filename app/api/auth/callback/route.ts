@@ -10,7 +10,8 @@ export async function GET(request: Request) {
   const code = searchParams.get('code');
 
   if (!code) {
-    return NextResponse.redirect('/login');
+    return NextResponse.redirect(`${BASE_URL}/login`);
+
   }
 
   try {
