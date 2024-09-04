@@ -7,11 +7,13 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import { Loader2 } from 'lucide-react'
 import RepositoryRowItem from 'app/components/RespositoryRowItem'
 import SearchBar from 'app/components/SearchBar'
+import { useRouter } from 'next/navigation'
 
 export default function RepositoryList() {
   const [searchTerm, setSearchTerm] = useState('react')
   const [page, setPage] = useState(1)
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState(searchTerm)
+  const router = useRouter()
 
   useEffect(() => {
     const handler = setTimeout(() => {
@@ -34,6 +36,28 @@ export default function RepositoryList() {
     setPage(1)
   }
 
+  const handleDonate = async (repositoryFullName: string, issueNumber: number) => {
+    try {
+      const response = await fetch('/api/create-donation-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ repositoryFullName, issueNumber }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create donation session');
+      }
+
+      const { id } = await response.json();
+      router.push(`https://checkout.stripe.com/pay/${id}`);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to initiate donation process.');
+    }
+  };
+
   return (
     <Card className="w-full max-w-4xl mx-auto rounded-sm my-4">
       <CardHeader>
@@ -50,7 +74,7 @@ export default function RepositoryList() {
         ) : (
           <ul className="space-y-6">
             {repositories?.map(repo => (
-              <RepositoryRowItem key={repo.id} repository={repo} />
+              <RepositoryRowItem key={repo.id} repository={repo} onDonate={handleDonate} />
             ))}
           </ul>
         )}

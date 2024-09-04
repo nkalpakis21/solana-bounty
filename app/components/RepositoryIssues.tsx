@@ -9,11 +9,9 @@ import { Badge } from "@/components/ui/badge"
 import { GitHubLogoIcon, MagnifyingGlassIcon, StarIcon } from '@radix-ui/react-icons'
 import { Skeleton } from "@/components/ui/skeleton"
 import { Label } from "@/components/ui/label"
+import { useRouter } from 'next/navigation'
+import { ArrowUpRight } from 'lucide-react'
 
-// Replace with your actual Client ID from PayPal
-const PAYPAL_CLIENT_ID = "AT42DBUEBrktRK6_BvTo_Sltbct_3Hx0wyz3GtpNueZY5P89TWULO1J6t81XYVqyMPyaQdd0YOHZyzYg"
-
-// Define types locally
 interface User {
   login: string;
   avatar_url: string;
@@ -34,6 +32,8 @@ interface Issue {
   created_at: string;
   labels: Label[];
   comments: number;
+  donationAmount: number;
+  donatorCount: number;
 }
 
 interface Repository {
@@ -52,10 +52,30 @@ interface RepositoryIssuesProps {
 export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [isOpen, setIsOpen] = useState(false)
-  const [amount, setAmount] = useState("5.00")
-  const [currency, setCurrency] = useState("USD")
   const issuesPerPage = 10
+  const router = useRouter()
+
+  const handleDonate = async (repositoryFullName: string, issueNumber: number) => {
+    try {
+      const response = await fetch('/api/stripe/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ repositoryFullName, issueNumber }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to create donation session');
+      }
+
+      const { url } = await response.json();
+      router.push(url);
+    } catch (error) {
+      console.error(error);
+      alert('Failed to initiate donation process.');
+    }
+  };
 
   if (!repo || !issues) {
     return (
@@ -83,12 +103,10 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
     )
   }
 
-  // Filter issues based on search term
   const filteredIssues = issues.filter((issue) =>
     issue.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
-
-  // Paginate issues
+  
   const indexOfLastIssue = currentPage * issuesPerPage
   const indexOfFirstIssue = indexOfLastIssue - issuesPerPage
   const currentIssues = filteredIssues.slice(indexOfFirstIssue, indexOfLastIssue)
@@ -115,7 +133,7 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
           </div>
         </CardHeader>
       </Card>
-      <div className="mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
+      <div className="mb-6 flex sm:flex-row gap-4 items-start sm:items-center space-y-4 sm:space-y-0">
         <h2 className="text-2xl font-semibold">Open Issues ({repo.open_issues_count})</h2>
         <div className="relative w-full sm:w-auto">
           <MagnifyingGlassIcon className="absolute left-2 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -129,34 +147,46 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
         </div>
       </div>
 
-      <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {currentIssues.map((issue) => (
-          <Card key={issue.id}>
+          <Card key={issue.id} className="flex flex-col">
             <CardHeader>
               <CardTitle className="text-lg">
-                <a href={issue.html_url} className="hover:underline">#{issue.number} {issue.title}</a>
+                <a href={issue.html_url} className="hover:underline flex items-center">
+                  #{issue.number} {issue.title}
+                  <ArrowUpRight className="w-4 h-4 ml-1" />
+                </a>
               </CardTitle>
+              <CardDescription>
+                Opened on {new Date(issue.created_at).toLocaleDateString()} by {issue.user.login}
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              <div className="flex items-center space-x-4">
-                <Avatar className="w-8 h-8">
-                  <AvatarImage src={issue.user.avatar_url} alt={issue.user.login} />
-                  <AvatarFallback>{issue.user.login[0].toUpperCase()}</AvatarFallback>
-                </Avatar>
-                <span className="text-sm text-gray-500">
-                  Opened on {new Date(issue.created_at).toLocaleDateString()} by {issue.user.login}
-                </span>
-              </div>
-              <div className="mt-2 space-x-2">
+            <CardContent className="flex-grow">
+              <div className="flex flex-wrap gap-2 mb-4">
                 {issue.labels.map((label) => (
                   <Badge key={label.id} style={{backgroundColor: `#${label.color}`}}>
                     {label.name}
                   </Badge>
                 ))}
               </div>
+              <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">Total Donations</span>
+                  <span className="font-semibold text-green-600">${issue.donationAmount?.toFixed(2) || 0}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-sm font-medium">Donators</span>
+                  <span className="text-sm">{issue.donatorCount || 0}</span>
+                </div>
+              </div>
             </CardContent>
             <CardFooter>
-              <span className="text-sm text-gray-500">{issue.comments} comments</span>
+              <Button
+                onClick={() => handleDonate(repo.full_name, issue.number)}
+                className="w-full bg-green-500 hover:bg-green-600 text-white"
+              >
+                Donate to This Issue
+              </Button>
             </CardFooter>
           </Card>
         ))}
