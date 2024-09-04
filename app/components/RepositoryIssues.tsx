@@ -31,9 +31,9 @@ interface Issue {
   user: User;
   created_at: string;
   labels: Label[];
-  comments: number;
-  donationAmount: number;
-  donatorCount: number;
+  comments?: number;
+  donationAmount?: number;
+  donatorCount?: number;
 }
 
 interface Repository {
@@ -106,7 +106,7 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
   const filteredIssues = issues.filter((issue) =>
     issue.title.toLowerCase().includes(searchTerm.toLowerCase())
   )
-  
+
   const indexOfLastIssue = currentPage * issuesPerPage
   const indexOfFirstIssue = indexOfLastIssue - issuesPerPage
   const currentIssues = filteredIssues.slice(indexOfFirstIssue, indexOfLastIssue)
