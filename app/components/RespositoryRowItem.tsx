@@ -2,7 +2,7 @@ import React from 'react'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Star, GitFork, AlertCircle, Code } from 'lucide-react'
+import { Star, GitFork, AlertCircle, Code, ExternalLink } from 'lucide-react'
 
 interface Repository {
   id?: number;
@@ -48,65 +48,68 @@ export default function RepositoryRowItem({ repository, onDonate }: RepositoryIt
     license
   } = repository;
 
+  const formatNumber = (num: number) => num.toLocaleString();
+
   return (
-    <Card className="w-full hover:shadow-lg hover:shadow-indigo-200 transition-shadow duration-300 ease-in-out rounded-sm">
-      <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div className="flex items-center space-x-4">
-          <Avatar className="h-10 w-10">
-            {owner && owner.avatar_url ? (
-              <AvatarImage src={owner.avatar_url} alt={owner.login || 'Repository owner'} />
-            ) : (
-              <AvatarFallback>{(owner?.login || name)[0].toUpperCase()}</AvatarFallback>
-            )}
-          </Avatar>
-          <div>
-            <CardTitle className="text-lg font-bold">
-              <a href={`/discover/${full_name}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+    <Card className="w-full transition-all duration-300 hover:shadow-lg focus-within:shadow-lg hover:scale-105 focus-within:scale-105 group">
+      <a href={`/discover/${full_name}`} className="block outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg">
+        <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="flex items-center space-x-4">
+            <Avatar className="h-10 w-10">
+              {owner && owner.avatar_url ? (
+                <AvatarImage src={owner.avatar_url} alt={owner.login || 'Repository owner'} />
+              ) : (
+                <AvatarFallback>{(owner?.login || name)[0].toUpperCase()}</AvatarFallback>
+              )}
+            </Avatar>
+            <div>
+              <CardTitle className="text-lg font-bold flex items-center text-blue-600">
                 {full_name}
-              </a>
-            </CardTitle>
-            {language && (
-              <p className="text-sm text-muted-foreground flex items-center mt-1">
-                <Code className="w-4 h-4 mr-1" />
-                {language}
-              </p>
-            )}
+                <ExternalLink className="w-4 h-4 ml-2 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity" />
+              </CardTitle>
+              {language && (
+                <p className="text-sm text-muted-foreground flex items-center mt-1">
+                  <Code className="w-4 h-4 mr-1" />
+                  {language}
+                </p>
+              )}
+            </div>
           </div>
-        </div>
-        <div className="flex flex-wrap gap-2">
-          <div className="flex items-center text-sm text-muted-foreground hover:text-yellow-600 p-2 rounded-lg transition-transform duration-200 ease-in-out transform hover:scale-105">
-            <Star className="w-4 h-4 mr-1 text-yellow-500" />
-            <span>{stargazers_count.toLocaleString()}</span>
+          <div className="flex flex-wrap gap-2">
+            <div className="flex items-center text-sm text-muted-foreground hover:text-yellow-600 p-2 rounded-lg transition-colors duration-200 ease-in-out">
+              <Star className="w-4 h-4 mr-1 text-yellow-500" />
+              <span>{formatNumber(stargazers_count)}</span>
+            </div>
+            <div className="flex items-center text-sm text-muted-foreground hover:text-gray-900 p-2 rounded-lg transition-colors duration-200 ease-in-out">
+              <GitFork className="w-4 h-4 mr-1 text-gray-900" />
+              <span>{formatNumber(forks_count)}</span>
+            </div>
+            <div className="flex items-center text-sm text-muted-foreground hover:text-red-500 p-2 rounded-lg transition-colors duration-200 ease-in-out">
+              <AlertCircle className="w-4 h-4 mr-1 text-red-500" />
+              <span>{formatNumber(open_issues_count)} issues</span>
+            </div>
           </div>
-          <div className="flex items-center text-sm text-muted-foreground ml-4 hover:text-gray-900 transition-transform duration-200 ease-in-out transform hover:scale-105">
-            <GitFork className="w-4 h-4 mr-1 text-gray-900" />
-            <span>{forks_count.toLocaleString()}</span>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-muted-foreground mb-4">
+            {description || 'No description provided.'}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {topics.map((topic) => (
+              <Badge key={topic} variant="secondary" className="px-2 py-1 text-xs bg-blue-50 text-blue-600 sm:bg-transparent sm:group-hover:bg-blue-50 transition-colors">
+                {topic}
+              </Badge>
+            ))}
           </div>
-          <div className="flex items-center text-sm text-muted-foreground ml-4 hover:text-red-500 transition-transform duration-200 ease-in-out transform hover:scale-105">
-            <AlertCircle className="w-4 h-4 mr-1 text-red-500" />
-            <span>{open_issues_count.toLocaleString()} issues</span>
-          </div>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <p className="text-sm text-muted-foreground mb-4">
-          {description || 'No description provided.'}
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {topics.map((topic) => (
-            <Badge key={topic} variant="secondary" className="px-2 py-1 text-xs bg-primary/10 text-primary">
-              {topic}
+        </CardContent>
+        <CardFooter className="flex justify-between items-center py-4 bg-gray-50 rounded-b-lg">
+          {license && license.name && (
+            <Badge variant="outline" className="text-xs px-2 py-1 rounded-lg bg-white border-gray-300">
+              {license.name}
             </Badge>
-          ))}
-        </div>
-      </CardContent>
-      <CardFooter className="flex justify-between items-center py-4 bg-gray-50 rounded-b-lg">
-        {license && license.name && (
-          <Badge variant="outline" className="text-xs px-2 py-1 rounded-lg bg-white border-gray-300">
-            {license.name}
-          </Badge>
-        )}
-      </CardFooter>
+          )}
+        </CardFooter>
+      </a>
     </Card>
   )
 }
