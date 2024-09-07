@@ -1,8 +1,22 @@
 import React from 'react'
+import Link from 'next/link'
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Star, GitFork, AlertCircle, Code, ExternalLink } from 'lucide-react'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+import { Progress } from "@/components/ui/progress"
+import { Star, GitFork, AlertCircle, Code, ExternalLink, Users, Trophy, GitCommit, GitPullRequest } from 'lucide-react'
+
+interface Contributor {
+  login: string;
+  avatar_url: string;
+  contributions: number;
+  html_url: string;
+  commits: number;
+  additions: number;
+  deletions: number;
+  pull_requests: number;
+}
 
 interface Repository {
   id?: number;
@@ -22,6 +36,7 @@ interface Repository {
   license?: {
     name?: string;
   } | null;
+  contributors?: Contributor[];
 }
 
 interface RepositoryItemProps {
@@ -45,14 +60,34 @@ export default function RepositoryRowItem({ repository, onDonate }: RepositoryIt
     language,
     owner,
     topics = [],
-    license
+    license,
+    contributors = []
   } = repository;
 
   const formatNumber = (num: number) => num.toLocaleString();
 
+  const totalContributions = contributors.reduce((sum, contributor) => sum + contributor.contributions, 0);
+
+  const getContributionPercentage = (contributions: number) => {
+    return (contributions / totalContributions) * 100;
+  };
+
+  const getRankBadge = (index: number) => {
+    switch (index) {
+      case 0:
+        return <Trophy className="w-5 h-5 text-yellow-500" />;
+      case 1:
+        return <Trophy className="w-5 h-5 text-gray-400" />;
+      case 2:
+        return <Trophy className="w-5 h-5 text-amber-600" />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <Card className="w-full transition-all duration-300 hover:shadow-lg focus-within:shadow-lg hover:scale-105 focus-within:scale-105 group">
-      <a href={`/discover/${full_name}`} className="block outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg">
+      <Link href={`/discover/${full_name}`} className="block outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-lg">
         <CardHeader className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div className="flex items-center space-x-4">
             <Avatar className="h-10 w-10">
@@ -94,13 +129,70 @@ export default function RepositoryRowItem({ repository, onDonate }: RepositoryIt
           <p className="text-sm text-muted-foreground mb-4">
             {description || 'No description provided.'}
           </p>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-4">
             {topics.map((topic) => (
               <Badge key={topic} variant="secondary" className="px-2 py-1 text-xs bg-blue-50 text-blue-600 sm:bg-transparent sm:group-hover:bg-blue-50 transition-colors">
                 {topic}
               </Badge>
             ))}
           </div>
+          {contributors.length > 0 && (
+            <div className="mt-4">
+              <h4 className="text-sm font-semibold mb-2 flex items-center">
+                <Users className="w-4 h-4 mr-2" />
+                Top Contributors Leaderboard
+              </h4>
+              <div className="space-y-4">
+                {contributors.slice(0, 5).map((contributor, index) => (
+                  <div key={contributor.login} className="flex items-center space-x-4">
+                    <div className="flex-shrink-0">
+                      {getRankBadge(index)}
+                    </div>
+                    <TooltipProvider>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Link 
+                            href={contributor.html_url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="flex-shrink-0 transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 rounded-full"
+                            aria-label={`View ${contributor.login}'s GitHub profile`}
+                          >
+                            <Avatar className="h-10 w-10 ring-2 ring-white">
+                              <AvatarImage src={contributor.avatar_url} alt={contributor.login} />
+                              <AvatarFallback>{contributor.login[0].toUpperCase()}</AvatarFallback>
+                            </Avatar>
+                          </Link>
+                        </TooltipTrigger>
+                        <TooltipContent side="right" className="p-4 space-y-2">
+                          <p className="font-semibold">{contributor.login}</p>
+                          <div className="flex items-center space-x-2">
+                            <GitCommit className="w-4 h-4" />
+                            <span>{contributor.commits} commits</span>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <GitPullRequest className="w-4 h-4" />
+                            <span>{contributor.pull_requests} PRs</span>
+                          </div>
+                          <div className="text-xs">
+                            <span className="text-green-500">+{contributor.additions}</span> / 
+                            <span className="text-red-500">-{contributor.deletions}</span>
+                          </div>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                    <div className="flex-grow">
+                      <div className="flex justify-between items-center mb-1">
+                        <span className="text-sm font-medium">{contributor.login}</span>
+                        <span className="text-sm font-medium">{contributor.contributions} contributions</span>
+                      </div>
+                      <Progress value={getContributionPercentage(contributor.contributions)} className="h-2" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </CardContent>
         <CardFooter className="flex justify-between items-center py-4 bg-gray-50 rounded-b-lg">
           {license && license.name && (
@@ -109,7 +201,7 @@ export default function RepositoryRowItem({ repository, onDonate }: RepositoryIt
             </Badge>
           )}
         </CardFooter>
-      </a>
+      </Link>
     </Card>
   )
 }
