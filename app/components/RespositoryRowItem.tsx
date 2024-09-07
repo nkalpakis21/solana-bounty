@@ -110,7 +110,7 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
           <div className="mt-4">
             <h4 className="text-sm font-semibold mb-2 flex items-center">
               <Users className="w-4 h-4 mr-2" />
-              Contribution Distribution
+              Top Devs 🚀
             </h4>
             <div className="flex flex-col md:flex-row items-center justify-between">
               <div className="w-full md:w-1/2 h-64 hidden md:block">
