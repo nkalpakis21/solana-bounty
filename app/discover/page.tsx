@@ -36,27 +36,28 @@ export default function RepositoryList() {
     setPage(1)
   }
 
-  const handleDonate = async (repositoryFullName: string, issueNumber: number) => {
-    try {
-      const response = await fetch('/api/create-donation-session', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ repositoryFullName, issueNumber }),
-      });
+  // TODO if i want to handle donate at the repo item level
+  // const handleDonate = async (repositoryFullName: string, issueNumber: number) => {
+  //   try {
+  //     const response = await fetch('/api/create-donation-session', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ repositoryFullName, issueNumber }),
+  //     });
 
-      if (!response.ok) {
-        throw new Error('Failed to create donation session');
-      }
+  //     if (!response.ok) {
+  //       throw new Error('Failed to create donation session');
+  //     }
 
-      const { id } = await response.json();
-      router.push(`https://checkout.stripe.com/pay/${id}`);
-    } catch (error) {
-      console.error(error);
-      alert('Failed to initiate donation process.');
-    }
-  };
+  //     const { id } = await response.json();
+  //     router.push(`https://checkout.stripe.com/pay/${id}`);
+  //   } catch (error) {
+  //     console.error(error);
+  //     alert('Failed to initiate donation process.');
+  //   }
+  // };
 
   return (
     <Card className="w-full max-w-4xl mx-auto rounded-sm my-4">
@@ -74,7 +75,7 @@ export default function RepositoryList() {
         ) : (
           <ul className="space-y-6">
             {repositories?.map(repo => (
-              <RepositoryRowItem key={repo.id} repository={repo} onDonate={handleDonate} />
+              <RepositoryRowItem key={repo.id} repository={repo} />
             ))}
           </ul>
         )}

@@ -9,7 +9,7 @@ import { Repository } from 'app/types/github/types'
 
 interface RepositoryItemProps {
   repository: Repository;
-  onDonate: (repositoryFullName: string, issueNumber: number) => Promise<void>;
+  // onDonate: (repositoryFullName: string, issueNumber: number) => Promise<void>;
 }
 
 export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
