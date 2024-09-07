@@ -1,5 +1,6 @@
 'use client';
-import { Issue, Repository } from 'app/types/types';
+import { Repository } from 'app/types/github/types';
+import { Issue } from 'app/types/types';
 import useSWR from 'swr';
 
 interface RepositoryData {
