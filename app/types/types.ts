@@ -20,4 +20,6 @@
     comments: number;
     created_at: string;
     html_url: string;
+    donationAmount: number;
+    donatorCount: number;
   }

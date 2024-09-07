@@ -11,38 +11,8 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
-
-interface User {
-  login: string;
-  avatar_url: string;
-}
-
-interface Label {
-  id: number;
-  name: string;
-  color: string;
-}
-
-interface Issue {
-  id: number;
-  number: number;
-  title: string;
-  html_url: string;
-  user: User;
-  created_at: string;
-  labels: Label[];
-  comments?: number;
-  donationAmount?: number;
-  donatorCount?: number;
-}
-
-interface Repository {
-  full_name: string;
-  description: string;
-  stargazers_count: number;
-  language: string;
-  open_issues_count: number;
-}
+import { Repository } from 'app/types/github/types'
+import { Issue } from 'app/types/types'
 
 interface RepositoryIssuesProps {
   repo?: Repository;
@@ -55,7 +25,7 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
   const issuesPerPage = 10
   const router = useRouter()
 
-  const handleDonate = async (repositoryFullName: string, issueNumber: number) => {
+  const handleDonate = async (repositoryFullName='', issueNumber: number) => {
     try {
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
@@ -66,6 +36,8 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
       });
 
       if (!response.ok) {
+        console.error(repositoryFullName);
+        console.error(issueNumber)
         throw new Error('Failed to create donation session');
       }
 
@@ -127,7 +99,7 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
           <div className="flex items-center space-x-4 mt-4 sm:mt-0">
             <div className="flex items-center">
               <StarIcon className="w-5 h-5 text-yellow-400 mr-1" />
-              <span>{repo.stargazers_count.toLocaleString()}</span>
+              <span>{repo.stargazers_count?.toLocaleString()}</span>
             </div>
             <Badge variant="outline">{repo.language}</Badge>
           </div>
