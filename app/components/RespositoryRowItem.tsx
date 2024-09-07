@@ -5,45 +5,16 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Star, GitFork, AlertCircle, Code, ExternalLink, Users, Trophy } from 'lucide-react'
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts'
-
-interface Contributor {
-  login: string;
-  avatar_url: string;
-  contributions: number;
-  html_url: string;
-  commits: number;
-  additions: number;
-  deletions: number;
-  pull_requests: number;
-}
-
-interface Repository {
-  id?: number;
-  name?: string;
-  full_name?: string;
-  description?: string | null;
-  html_url?: string;
-  stargazers_count?: number;
-  open_issues_count?: number;
-  forks_count?: number;
-  language?: string | null;
-  owner?: {
-    login?: string;
-    avatar_url?: string;
-  };
-  topics?: string[];
-  license?: {
-    name?: string;
-  } | null;
-  contributors?: Contributor[];
-}
+import { Repository } from 'app/types/github/types'
 
 interface RepositoryItemProps {
   repository: Repository;
   onDonate: (repositoryFullName: string, issueNumber: number) => Promise<void>;
 }
 
-export default function RepositoryRowItem({ repository, onDonate }: RepositoryItemProps) {
+export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   if (!repository) {
     return <Card className="w-full p-4">No repository data available</Card>;
   }
@@ -65,14 +36,8 @@ export default function RepositoryRowItem({ repository, onDonate }: RepositoryIt
 
   const formatNumber = (num: number) => num.toLocaleString();
 
-  const totalContributions = contributors.reduce((sum, contributor) => sum + contributor.contributions, 0);
-
-  const getContributionPercentage = (contributions: number) => {
-    return (contributions / totalContributions) * 100;
-  };
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
-  const [activeIndex, setActiveIndex] = useState(0);
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
   };

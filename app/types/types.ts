@@ -1,11 +1,4 @@
- export interface Repository {
-    full_name: string;
-    description: string;
-    stargazers_count: number;
-    language: string;
-    open_issues_count: number;
-  }
-  
+
   export interface User {
     login: string;
     avatar_url: string;

@@ -1,22 +1,7 @@
 'use client';
 
+import { Contributor, Repository } from 'app/types/github/types';
 import useSWR from 'swr';
-
-interface Repository {
-    id: number;
-    name: string;
-    description: string;
-    html_url: string;
-    stargazers_count: number;
-    open_issues_count: number;
-    full_name: string;
-}
-
-interface Contributor {
-    login: string;
-    avatar_url: string;
-    contributions: number;
-}
 
 const GITHUB_TOKEN = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
 

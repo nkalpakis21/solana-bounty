@@ -38,3 +38,34 @@
     // Add additional fields if needed
   }
   
+  export interface Contributor {
+    login: string;
+    avatar_url: string;
+    contributions: number;
+    html_url: string;
+    commits: number;
+    additions: number;
+    deletions: number;
+    pull_requests: number;
+  }
+  
+  export interface Repository {
+    id?: number;
+    name?: string;
+    full_name?: string;
+    description?: string | null;
+    html_url?: string;
+    stargazers_count?: number;
+    open_issues_count?: number;
+    forks_count?: number;
+    language?: string | null;
+    owner?: {
+      login?: string;
+      avatar_url?: string;
+    };
+    topics?: string[];
+    license?: {
+      name?: string;
+    } | null;
+    contributors?: Contributor[];
+  }
