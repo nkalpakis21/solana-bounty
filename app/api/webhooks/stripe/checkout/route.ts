@@ -2,9 +2,7 @@ import stripe from 'app/lib/stripe';
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-// Define your Stripe webhook secret
-// const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
-const webhookSecret = 'whsec_f8ad19bc20c4eca9806e52462c24ae152b7dc3190a6df7cc54f868a6a2f9e5cb'
+const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 export async function POST(req: NextRequest) {
   const sig = req.headers.get('stripe-signature') as string;
 
@@ -14,8 +12,6 @@ export async function POST(req: NextRequest) {
     // Read the raw body
     const rawBody = await req.text();
 
-    console.log('*******************')
-    console.log(webhookSecret)
     // Verify and construct the event
     event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (err) {
