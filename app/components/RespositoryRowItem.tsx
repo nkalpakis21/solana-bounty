@@ -9,7 +9,6 @@ import { Repository } from 'app/types/github/types'
 
 interface RepositoryItemProps {
   repository: Repository;
-  // onDonate: (repositoryFullName: string, issueNumber: number) => Promise<void>;
 }
 
 export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
@@ -36,7 +35,6 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
 
   const formatNumber = (num: number) => num.toLocaleString();
 
-
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8'];
   const onPieEnter = (_: any, index: number) => {
     setActiveIndex(index);
@@ -45,11 +43,11 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
   const getRankBadge = (index: number) => {
     switch (index) {
       case 0:
-        return <Trophy className="w-5 h-5 text-yellow-500" />;
+        return <Trophy className="w-4 h-4 text-yellow-500" />;
       case 1:
-        return <Trophy className="w-5 h-5 text-gray-400" />;
+        return <Trophy className="w-4 h-4 text-gray-400" />;
       case 2:
-        return <Trophy className="w-5 h-5 text-amber-600" />;
+        return <Trophy className="w-4 h-4 text-amber-600" />;
       default:
         return null;
     }
@@ -136,17 +134,22 @@ export default function RepositoryRowItem({ repository }: RepositoryItemProps) {
               </div>
               <div className="w-full md:w-1/2">
                 {contributors.slice(0, 5).map((contributor, index) => (
-                  <div key={contributor.login} className={`flex items-center space-x-2 p-2 ${index === activeIndex ? 'bg-gray-100 rounded' : ''}`}>
-                    <div className="w-4 h-4 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
-                    <Link href={contributor.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 hover:underline">
-                      <Avatar className="h-8 w-8">
-                        <AvatarImage src={contributor.avatar_url} alt={contributor.login} />
-                        <AvatarFallback>{contributor.login[0].toUpperCase()}</AvatarFallback>
-                      </Avatar>
-                      <span className="flex-grow">{contributor.login}</span>
-                    </Link>
-                    <span>{contributor.contributions} contributions</span>
-                    {getRankBadge(index)}
+                  <div key={contributor.login} className={`flex items-center justify-between space-x-2 p-2 ${index === activeIndex ? 'bg-gray-100 rounded' : ''}`}>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-4 h-4 rounded-full" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                      <Link href={contributor.html_url} target="_blank" rel="noopener noreferrer" className="flex items-center space-x-2 hover:underline">
+                        <Avatar className="h-8 w-8">
+                          <AvatarImage src={contributor.avatar_url} alt={contributor.login} />
+                          <AvatarFallback>{contributor.login[0].toUpperCase()}</AvatarFallback>
+                        </Avatar>
+                        <span>{contributor.login}</span>
+                      </Link>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <span className="hidden sm:inline">{contributor.contributions} contributions</span>
+                      <span className="sm:hidden">{contributor.contributions}</span>
+                      {getRankBadge(index)}
+                    </div>
                   </div>
                 ))}
               </div>
