@@ -4,11 +4,9 @@ import React, { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { GitHubLogoIcon, MagnifyingGlassIcon, StarIcon } from '@radix-ui/react-icons'
 import { Skeleton } from "@/components/ui/skeleton"
-import { Label } from "@/components/ui/label"
 import { useRouter } from 'next/navigation'
 import { ArrowUpRight } from 'lucide-react'
 import { Repository } from 'app/types/github/types'
@@ -22,17 +20,26 @@ interface RepositoryIssuesProps {
 export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
+  const [donationAmounts, setDonationAmounts] = useState<{[key: number]: string}>({})
   const issuesPerPage = 10
   const router = useRouter()
 
   const handleDonate = async (repositoryFullName='', issueNumber: number) => {
     try {
+      const amount = parseFloat(donationAmounts[issueNumber] || '5')
+      if (isNaN(amount) || amount <= 0) {
+        throw new Error('Invalid donation amount')
+      }
+
+      // Convert the dollar amount to cents
+      const amountInCents = Math.round(amount * 100)
+
       const response = await fetch('/api/stripe/checkout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ repositoryFullName, issueNumber }),
+        body: JSON.stringify({ repositoryFullName, issueNumber, amountInCents }),
       });
 
       if (!response.ok) {
@@ -45,9 +52,15 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
       router.push(url);
     } catch (error) {
       console.error(error);
-      alert('Failed to initiate donation process.');
+      alert('Failed to initiate donation process. Please ensure you entered a valid amount.');
     }
   };
+
+  const handleDonationAmountChange = (issueNumber: number, amount: string) => {
+    // Allow only numbers and one decimal point
+    const sanitizedAmount = amount.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+    setDonationAmounts(prev => ({...prev, [issueNumber]: sanitizedAmount}))
+  }
 
   if (!repo || !issues) {
     return (
@@ -153,12 +166,26 @@ export default function RepositoryIssues({ repo, issues }: RepositoryIssuesProps
               </div>
             </CardContent>
             <CardFooter>
-              <Button
-                onClick={() => handleDonate(repo.full_name, issue.number)}
-                className="w-full bg-green-500 hover:bg-green-600 text-white"
-              >
-                Donate to This Issue
-              </Button>
+              <div className="flex w-full items-stretch space-x-2">
+                <div className="relative flex-grow-0 flex items-stretch">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none">$</span>
+                  <Input
+                    type="text"
+                    inputMode="decimal"
+                    placeholder="5.00"
+                    value={donationAmounts[issue.number] || '5'}
+                    onChange={(e) => handleDonationAmountChange(issue.number, e.target.value)}
+                    className="pl-7 w-28 h-full"
+                  />
+                </div>
+                <Button
+                  onClick={() => handleDonate(repo.full_name, issue.number)}
+                  className="bg-green-500 hover:bg-green-600 text-white flex-grow"
+                  disabled={parseFloat(donationAmounts[issue.number] || '5') <= 0}
+                >
+                  Donate
+                </Button>
+              </div>
             </CardFooter>
           </Card>
         ))}

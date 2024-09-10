@@ -7,7 +7,7 @@ export async function POST(req: NextRequest) {
 
   try {
     // Extracting the request body
-    const { repositoryFullName, issueNumber } = await req.json();
+    const { repositoryFullName, issueNumber, amountInCents } = await req.json();
 
     // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
             product_data: {
               name: 'Github Open Issue',
             },
-            unit_amount: 2000, // Amount in cents
+            unit_amount: amountInCents, // Amount in cents
           },
           quantity: 1,
         },
@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
       metadata: {
         repositoryFullName,
         issueNumber,
+        amountInCents,
       },
     });
 
