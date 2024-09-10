@@ -6,6 +6,10 @@ export async function POST(req: NextRequest) {
   const cancel_url = `${process.env.BASE_URL}/discover`;
 
   try {
+    // Extracting the request body
+    const { repositoryFullName, issueNumber } = await req.json();
+
+    // Create Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -23,10 +27,17 @@ export async function POST(req: NextRequest) {
       mode: 'payment',
       success_url,
       cancel_url,
+      // Add metadata here
+      metadata: {
+        repositoryFullName,
+        issueNumber,
+      },
     });
 
+    // Return the session URL in the response
     return NextResponse.json({ url: session.url });
   } catch (error) {
+    console.error('Error creating Stripe Checkout session:', error);
     return new NextResponse('Internal Server Error', { status: 500 });
   }
 }
