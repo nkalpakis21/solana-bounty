@@ -40,7 +40,7 @@ export default function HomePage() {
           <FeatureCard
             icon={<Coins className="h-12 w-12 text-indigo-400" />}
             title="Earn Rewards"
-            description="Get compensated for your contributions with cryptocurrency rewards."
+            description="Get compensated for your contributions with $$$ rewards."
           />
           <FeatureCard
             icon={<Github className="h-12 w-12 text-indigo-400" />}
