@@ -13,7 +13,7 @@ interface SearchBarProps {
 
 const suggestions = [
   { text: "AI tools", color: "bg-blue-100 hover:bg-blue-200 text-blue-800" },
-  { text: "Web3 dev", color: "bg-purple-100 hover:bg-purple-200 text-purple-800" },
+  { text: "Web3", color: "bg-purple-100 hover:bg-purple-200 text-purple-800" },
   { text: "Node.js", color: "bg-green-100 hover:bg-green-200 text-green-800" },
   { text: "ML guides", color: "bg-red-100 hover:bg-red-200 text-red-800" },
   { text: "Full-stack", color: "bg-yellow-100 hover:bg-yellow-200 text-yellow-800" },
