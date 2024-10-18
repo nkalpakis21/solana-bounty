@@ -8,6 +8,7 @@ import { Loader2 } from 'lucide-react'
 import RepositoryRowItem from 'app/components/RespositoryRowItem'
 import SearchBar from 'app/components/SearchBar'
 import { useRouter } from 'next/navigation'
+import Chat from '@/components/chat'
 
 export default function RepositoryList() {
   const [searchTerm, setSearchTerm] = useState('react')
@@ -64,6 +65,7 @@ export default function RepositoryList() {
       <CardHeader>
         <CardTitle className="text-3xl font-bold mb-4">Top Open Source Repositories</CardTitle>
         <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} onSearch={handleSearch}/>
+        <Chat setSearchTerm={setSearchTerm} />
       </CardHeader>
       <CardContent>
         {isLoading ? (
