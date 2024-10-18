@@ -76,7 +76,7 @@ export default function Component({ setSearchTerm }: ChatProps) {
     setSearchTerm(lastAiMessage?.content || '');
   }, [messages, setSearchTerm])
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     submitMessage(e);
   }
@@ -89,7 +89,7 @@ export default function Component({ setSearchTerm }: ChatProps) {
           Repo Search
         </CardTitle>
         <CardDescription className="text-center">
-          Describe your skills, interests, or the type of project you're looking for
+          Describe your skills, interests, or the type of project you are looking for
         </CardDescription>
       </CardHeader>
       <CardContent>
